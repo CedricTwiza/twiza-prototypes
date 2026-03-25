@@ -4,6 +4,15 @@
 
 Ce document décrit le flux complet pour maintenir et mettre à jour le catalogue de formations Twiza, hébergé sur GitHub Pages et intégré dans WordPress via une `<iframe>`.
 
+### Workflow de mise à jour (session Claude Code)
+
+1. Fournir le CSV (fichier ou copie-colle)
+2. Claude lit `twiza-formations.html` sur GitHub pour partir de l'état exact en production
+3. Claude génère le HTML mis à jour et affiche un **aperçu visuel interactif**
+4. Modifications éventuelles à la demande
+5. **Validation explicite** par Cédric
+6. Claude pousse automatiquement sur GitHub via l'API REST → GitHub Pages se met à jour en quelques secondes → l'iframe WordPress affiche la nouvelle version sans aucune intervention côté WordPress
+
 - **Fichier source** : `twiza-formations.html`
 - **URL GitHub Pages** : `https://cedrictwiza.github.io/twiza-prototypes/twiza-formations.html`
 - **Dépôt** : `https://github.com/cedrictwiza/twiza-prototypes`
@@ -135,18 +144,18 @@ Pour chaque thématique, générer :
 - Remplacer uniquement le contenu entre `<div class="twiza-catalogue">` et `</div>` final
 - Mettre à jour les commentaires de thème si les thématiques changent
 
-#### Étape 5 — Valider avant de publier
+#### Étape 5 — Aperçu visuel et validation
+Claude affiche le rendu HTML dans une fenêtre d'aperçu interactif avant tout envoi.
+Checklist de validation :
 - [ ] Chaque formation a un lien `href` valide (non vide)
 - [ ] Les badges `.twiza-count` reflètent le bon nombre
 - [ ] Les formations "Prochainement" n'ont pas de section `.twiza-dates`
 - [ ] L'accordéon JS fonctionne (pas de syntaxe cassée)
+- [ ] **Validation explicite de Cédric obtenue** avant de passer à l'étape suivante
 
-#### Étape 6 — Pousser sur GitHub
-```bash
-git add twiza-formations.html
-git commit -m "Mise à jour catalogue formations — [mois année]"
-git push origin main
-```
+#### Étape 6 — Publication automatique sur GitHub
+Claude pousse le fichier directement via l'API REST GitHub (token `GITHUB_TOKEN` configuré dans `~/.claude/settings.json`). Aucune action manuelle requise.
+
 GitHub Pages se met à jour automatiquement en quelques secondes.
 L'iframe WordPress affiche la nouvelle version sans intervention côté WordPress.
 
@@ -181,4 +190,4 @@ Dans la page ou le widget WordPress, le code d'intégration est :
 
 ---
 
-*Dernière mise à jour : mars 2026*
+*Dernière mise à jour : mars 2026 — push automatique via API GitHub activé (GITHUB_TOKEN)*
